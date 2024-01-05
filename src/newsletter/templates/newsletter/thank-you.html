@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Thank you for subscribing{% endblock %}
+
+{% block content %}
+<h1>Thanks</h1>
+<p>Thanks for subscribing to our newsletter.</p>
+<p>You should receive a confirmation email soon.</p>
+<div class="my-3">
+    <a href="{% url 'newsletter:subscribe' %}" class="btn btn-light text-black">Go Home</a>
+</div>
+{% endblock %}

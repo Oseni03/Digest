@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Unsubscribe{% endblock %}
+
+{% block content %}
+    <div class="mb-3">
+        <h2>Wanna leave?</h2>
+        <p class="lead">Prefer not to subscribe but just receive fewer email? <a href="#">click here</a></p>
+    </div>
+    <div class="text-start">
+        <form action="{% url 'newsletter:snooze-subscription' %}" method="POST">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col col-md-8">
+                    <input type="text" class="form-control" placeholder="Email address" name="email" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <p class="fw-bold mb-3">Need a break? snooze your subscription and we will not email you for 30 days.</p>
+                <button type="submit" class="btn btn-light border-white bg-white">
+                    Snooze
+                </button>
+            </div>
+        </form>
+        <hr class="my-4">
+        <form action="{% url 'newsletter:unsubscribe' subscriber.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="email_address" value="{{ subscriber.email_address }}" maxlength="320" required aria-invalid="true" id="id_email_address">
+            <p>We had a good run, but now it's over</p>
+            <p class="lead">
+                <button type="submit" class="btn btn-lg btn-light fw-bold border-white bg-white">Unsubscribe</button>
+            </p>
+        </form>
+    </div>
+{% endblock %}
+

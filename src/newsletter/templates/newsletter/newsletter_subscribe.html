@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Subscribe{% endblock %}
+
+{% block content %}
+    <h1>Get smart about EVERYTHING</h1>
+    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque quas dolorum voluptatibus doloribus, iste facere accusantium aliquam inventore a ab.</p>
+    <form action="." method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            {% render_field form.email_address class="form-control focus-ring focus-ring-dark" placeholder="Email address" %}
+        </div>
+        <p class="lead">
+            <button type="submit" class="btn btn-lg btn-light fw-bold border-white bg-white">Subscribe</button>
+        </p>
+    </form>
+{% endblock %}
+

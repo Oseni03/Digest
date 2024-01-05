@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Subscription{% endblock %}
+
+{% block content %}
+    {% if subscribed %}
+        <h2 class="mb-3">Glad to have you onboard!</h2>
+        <p>See you soon</p>
+    {% else %}
+        <h2 class="mb-3">Subscription confirmation link has expired or is invalid.</h2>
+        <p>Please click on the button below to receive an e-mail with a new confirmation link.</p>
+        <form method="post" class="subscriptionForm my-3" action="{% url 'newsletter:subscribe' %}">
+            {% csrf_token %}
+            <input type="hidden" name="email_address" required id="id_email_address" value="{{ object.email_address }}">
+            <button class="btn btn-light btn-lg text-black border-white bg-white" type="submit">Try Again</button>
+        </form>
+    {% endif %}
+{% endblock %}

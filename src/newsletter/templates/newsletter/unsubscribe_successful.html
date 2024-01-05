@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Unsubscribe successful{% endblock %}
+
+{% block content %}
+{% if source == "unsubscribe" %}
+<p class="fs-1">Missing you already</p>
+{% elif source == "snooze" %}
+<p class="fs-1">See you soon.</p>
+{% endif %}
+{% endblock %}
