@@ -54,17 +54,6 @@ class Subscriber(models.Model):
             signals.subscribed.send(
                 sender=self.__class__, instance=self
             )
-
-            return True
-
-    def snooze(self):
-        if not self.snoozed:
-            self.snoozed = True
-            self.save()
-
-            signals.snoozed.send(
-                sender=self.__class__, instance=self
-            )
             return True
 
     def unsubscribe(self):
@@ -79,6 +68,26 @@ class Subscriber(models.Model):
 
             return True
 
+    def snooze(self):
+        if not self.snoozed:
+            self.snoozed = True
+            self.save()
+
+            signals.snoozed.send(
+                sender=self.__class__, instance=self
+            )
+            return True
+    
+    def unsnooze(self):
+        if self.snoozed:
+            self.snoozed = False
+            self.save()
+
+            signals.unsnoozed.send(
+                sender=self.__class__, instance=self
+            )
+            return True
+    
     def send_verification_email(self, created):
         minutes_before = timezone.now() - timezone.timedelta(minutes=5)
         sent_date = self.verification_sent_date
