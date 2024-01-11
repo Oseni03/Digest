@@ -5,6 +5,7 @@ from django.views.generic import DetailView, FormView, TemplateView, View
 
 from .forms import SubscriberEmailForm
 from .models import Subscriber
+from .utils.email_validator import email_is_valid
 
 
 # Create your views here.
@@ -38,7 +39,8 @@ class SubscribeView(FormView):
             if settings.NEWSLETTER_SEND_VERIFICATION:
                 subscriber.send_verification_email(created, self.request.tenant.schema_name)
             else:
-                subscriber.subscribe(self.request.tenant.schema_name)
+                if email_is_valid(subscriber.email_address):
+                    subscriber.subscribe(self.request.tenant.schema_name)
         return super().form_valid(form)
 
 
