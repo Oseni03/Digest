@@ -6,8 +6,15 @@
 {% block content %}
 <h1>Thanks</h1>
 <p>Thanks for subscribing to our newsletter.</p>
+{% if send_newsletter %}
 <p>You should receive a confirmation email soon.</p>
 <div class="my-3">
     <a href="{% url 'newsletter:subscribe' %}" class="btn btn-light text-black">Go Home</a>
 </div>
+{% else %}
+<p>You missed a lot. Wanna catch up?</p>
+<div class="my-3">
+    <a href="{% url 'newsletter:archive' %}" class="btn btn-light text-black">View Archive</a>
+</div>
+{% endif %}
 {% endblock %}

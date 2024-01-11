@@ -1,33 +1,33 @@
+from django.urls import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 
-def send_subscription_verification_email(verification_url, to_email, niche):
+def send_welcome_email(niche, to_email):
     """
-    Sends verification e-mail to subscribers
+    Sends welcome e-mail to subscribers
 
-    :param verification_url: subscribers unique verification url
     :param to_email: subscribers email
     """
     context = {
+        'archive_url': reverse("newsletter:archive"),
         'site_url': settings.NEWSLETTER_SITE_BASE_URL,
-        'verification_url': verification_url,
         'niche': niche,
     }
 
     # Send context so that users can use context data in the subject
     subject = render_to_string(
-        'newsletter/email/email_verification_subject.txt',
+        'newsletter/email/email_welcome_subject.txt',
         context
     ).rstrip('\n')
 
     text_body = render_to_string(
-        'newsletter/email/email_verification.txt', 
+        'newsletter/email/email_welcome.txt', 
         context
     )
     html_body = render_to_string(
-        'newsletter/email/email_verification.html', 
+        'newsletter/email/email_welcome.html', 
         context
     )
 

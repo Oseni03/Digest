@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.conf import settings
 
 from . import signals
+
+from .tasks import send_welcome_email_task
 from .utils.send_verification import send_subscription_verification_email
 from .querysets import SubscriberQuerySet
 
@@ -45,8 +47,8 @@ class Subscriber(models.Model):
         self.token = unique_token
         self.save()
 
-    def subscribe(self):
-        if not self.token_expired():
+    def subscribe(self, niche):
+        if not settings.NEWSLETTER_SEND_VERIFICATION or not self.token_expired():
             self.verified = True
             self.subscribed = True
             self.save()
@@ -54,8 +56,9 @@ class Subscriber(models.Model):
             signals.subscribed.send(
                 sender=self.__class__, instance=self
             )
+            send_welcome_email_task.delay(niche, self.email_address)
             return True
-
+    
     def unsubscribe(self):
         if self.subscribed:
             self.subscribed = False
@@ -88,7 +91,7 @@ class Subscriber(models.Model):
             )
             return True
     
-    def send_verification_email(self, created):
+    def send_verification_email(self, created, niche):
         minutes_before = timezone.now() - timezone.timedelta(minutes=5)
         sent_date = self.verification_sent_date
 
@@ -103,7 +106,9 @@ class Subscriber(models.Model):
         self.save()
 
         send_subscription_verification_email(
-            self.get_verification_url(), self.email_address
+            self.get_verification_url(), 
+            self.email_address,
+            niche
         )
         signals.email_verification_sent.send(
             sender=self.__class__, instance=self

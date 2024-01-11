@@ -35,7 +35,10 @@ class SubscribeView(FormView):
             pass
             # messages.success(self.request, 'You have already subscribed to the newsletter.')
         else:
-            subscriber.send_verification_email(created)
+            if settings.NEWSLETTER_SEND_VERIFICATION:
+                subscriber.send_verification_email(created, self.request.tenant.schema_name)
+            else:
+                subscriber.subscribe(self.request.tenant.schema_name)
         return super().form_valid(form)
 
 
@@ -83,7 +86,7 @@ class SubscriptionConfirmView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        subscribed = self.object.subscribe()
+        subscribed = self.object.subscribe(request.tenant.schema_name)
         
         context = self.get_context_data(
             object=self.object, subscribed=subscribed
@@ -93,6 +96,11 @@ class SubscriptionConfirmView(DetailView):
 
 class ThankyouView(TemplateView):
     template_name = "newsletter/thank-you.html"
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["send_verification"] = settings.NEWSLETTER_SEND_VERIFICATION
+        return context
 
 
 class SnoozeSubscription(View):
@@ -102,3 +110,7 @@ class SnoozeSubscription(View):
         if subscriber.exists():
             subscriber.first().snooze()
         return render(request, "newsletter/unsubscribe_successful.html", {"source": "snooze"})
+
+
+class ArchiveView(TemplateView):
+    template_name = "newsletter/archive.html"

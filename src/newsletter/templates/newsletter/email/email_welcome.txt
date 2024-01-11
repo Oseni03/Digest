@@ -1,0 +1,7 @@
+Welcome to Digest
+
+Click the link below to view archive
+
+{{ niche  }}.{{ site_url }}{{ archive_url }}
+
+Thank You
