@@ -5,7 +5,7 @@
 {% block title %}Subscribe{% endblock %}
 
 {% block content %}
-    <h1>Get smart about EVERYTHING</h1>
+    <h1>Get smart about <span class="text-primary fw-bold">{{ niche|title }}</span></h1>
     <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque quas dolorum voluptatibus doloribus, iste facere accusantium aliquam inventore a ab.</p>
     <form action="." method="POST">
         {% csrf_token %}

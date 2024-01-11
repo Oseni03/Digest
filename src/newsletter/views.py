@@ -13,6 +13,11 @@ class SubscribeView(FormView):
     template_name = "newsletter/newsletter_subscribe.html"
     success_url = settings.NEWSLETTER_SUBSCRIPTION_REDIRECT_URL
     
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["niche"] = self.request.tenant.name
+        return context
+    
     def form_invalid(self, form):
         response = super().form_invalid(form)
         for error in form.errors.values():

@@ -19,23 +19,37 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+# TENANTS CONFIGURATION
+SHARED_APPS = (
+    'django_tenants', # mandatory
+    
+    'niche', # you must list the app where your tenant model resides in
     'django.contrib.contenttypes',
+    # everything below here is optional
+    'django.contrib.auth',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.admin',
     'django.contrib.staticfiles',
     
     "widget_tweaks",
     'django_celery_beat',
     'django_celery_results',
-    
-    # Custom apps
-    "newsletter",
-]
+)
+
+TENANT_APPS = (
+    # your tenant-specific apps    'django.contrib.messages'
+    'newsletter',
+)
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+
+TENANT_MODEL = "niche.Niche" # app.Model
+TENANT_DOMAIN_MODEL = "niche.Domain" # app.Model
+PUBLIC_SCHEMA_URLCONF = "niche.urls"
 
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,10 +84,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': "digest",
+        'USER': "oseni",
+        'PASSWORD': "postgres",
+        'HOST': "localhost",
+        'PORT': 5432,
     }
 }
+
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
 
 
 # Password validation
