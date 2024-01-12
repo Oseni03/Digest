@@ -4,8 +4,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
 
-from . import signals
+from ckeditor.fields import RichTextField
 
+from . import signals
 from .tasks import send_welcome_email_task
 from .utils.send_verification import send_subscription_verification_email
 from .querysets import SubscriberQuerySet
@@ -118,4 +119,39 @@ class Subscriber(models.Model):
         return reverse(
             'newsletter:newsletter_subscription_confirm',
             kwargs={'token': self.token}
+        )
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=150)
+    rss_url = models.URLField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
+    subscribers = models.ManyToManyField(Subscriber, related_name="categories", through="Subscription")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Newsletter(models.Model):
+    category = models.ForeignKey(Category, related_name="newletters", on_delete=models.SET_NULL, null=True)
+    subject = models.CharField(max_length=255)
+    content = RichTextField()
+    schedule = models.DateTimeField(blank=True, null=True)
+    sent_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField()
+    
+    def __str__(self):
+        return str(self.subject)
+
+
+class Subscription(models.Model):
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, related_name="sub_subscriber")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_category")
+    joined_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        models.UniqueConstraint(
+            name="unique_category_subscriber",
+            fields=["subscriber", "category"]
         )
