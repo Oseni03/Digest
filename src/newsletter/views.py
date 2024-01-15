@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from .forms import SubscriberEmailForm
-from .models import Subscriber
+from .models import Subscriber, Category
 from .utils.email_validator import email_is_valid
 
 
@@ -41,6 +41,10 @@ class SubscribeView(FormView):
             else:
                 if email_is_valid(subscriber.email_address):
                     subscriber.subscribe(self.request.tenant.schema_name)
+                    default_category = Category.objects.object.filter(is_default=True)
+                    if default_category.exists():
+                        subscriber.categories.add(default_category.first())
+                        subscriber.save()
                     self.request.session["subscriber_email"] = subscriber.email_address
         return super().form_valid(form)
 

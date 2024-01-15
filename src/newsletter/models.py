@@ -64,6 +64,7 @@ class Subscriber(models.Model):
         if self.subscribed:
             self.subscribed = False
             self.verified = False
+            self.categories.clear()
             self.save()
 
             signals.unsubscribed.send(
@@ -126,6 +127,7 @@ class Category(models.Model):
     name = models.CharField(max_length=150)
     rss_url = models.URLField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
+    is_default = models.BooleanField(default=True)
     subscribers = models.ManyToManyField(Subscriber, related_name="categories", through="Subscription")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
