@@ -41,6 +41,7 @@ class SubscribeView(FormView):
             else:
                 if email_is_valid(subscriber.email_address):
                     subscriber.subscribe(self.request.tenant.schema_name)
+                    self.request.session["subscriber_email"] = subscriber.email_address
         return super().form_valid(form)
 
 
@@ -93,6 +94,8 @@ class SubscriptionConfirmView(DetailView):
         context = self.get_context_data(
             object=self.object, subscribed=subscribed
         )
+        if subscribed:
+            request.session["subscriber_email"] = self.object.email_address
         return self.render_to_response(context)
 
 
