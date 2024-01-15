@@ -145,6 +145,12 @@ class Newsletter(models.Model):
     
     def __str__(self):
         return str(self.subject)
+    
+    class Meta:
+        ordering = ["-created_at"]
+    
+    def get_absolute_url(self):
+        return reverse("newsletter:newsletter-detail", args=(self.slug,))
 
 
 class Subscription(models.Model):

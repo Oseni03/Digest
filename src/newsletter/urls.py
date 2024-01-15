@@ -15,4 +15,6 @@ urlpatterns = [
     path("snooze-subscription/", views.SnoozeSubscription.as_view(), name="snooze-subscription"),
     path("thank-you/", views.ThankyouView.as_view(), name="thank-you"),
     path("archive/", views.ArchiveView.as_view(), name="archive"),
+    path("archive/<slug:slug>/", views.NewsletterDetailView.as_view(), name="newsletter-detail"),
+
 ]

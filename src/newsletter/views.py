@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from .forms import SubscriberEmailForm
-from .models import Subscriber, Category
+from .models import Subscriber, Category, Newsletter
 from .utils.email_validator import email_is_valid
 
 
@@ -17,6 +17,7 @@ class SubscribeView(FormView):
     def get_context_data(self):
         context = super().get_context_data()
         context["niche"] = self.request.tenant.name
+        context["latest"] = Newsletter.objects.first()
         return context
     
     def form_invalid(self, form):
@@ -123,3 +124,10 @@ class SnoozeSubscription(View):
 
 class ArchiveView(TemplateView):
     template_name = "newsletter/archive.html"
+
+
+class NewsletterDetailView(DetailView):
+    model = Newsletter 
+    template_name = "newsletter/newsletter_detail.html"
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
