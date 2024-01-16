@@ -40,7 +40,7 @@ class SubscribeView(FormView):
             if settings.NEWSLETTER_SEND_VERIFICATION:
                 subscriber.send_verification_email(created, self.request.tenant.schema_name)
             else:
-                if email_is_valid(subscriber.email_address):
+                # if email_is_valid(subscriber.email_address):
                     subscriber.subscribe(self.request.tenant.schema_name)
                     default_category = Category.objects.object.filter(is_default=True)
                     if default_category.exists():

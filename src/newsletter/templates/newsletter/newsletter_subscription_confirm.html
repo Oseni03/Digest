@@ -4,6 +4,7 @@
 {% block title %}Confirm Subscription{% endblock %}
 
 {% block content %}
+<div class="my-3">
     {% if subscribed %}
         <h2 class="mb-3">Glad to have you onboard!</h2>
         <p>See you soon</p>
@@ -16,4 +17,5 @@
             <button class="btn btn-light btn-lg text-black border-white bg-white" type="submit">Try Again</button>
         </form>
     {% endif %}
+</div>
 {% endblock %}

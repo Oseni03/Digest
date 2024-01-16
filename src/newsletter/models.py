@@ -76,6 +76,8 @@ class Subscriber(models.Model):
     def snooze(self):
         if not self.snoozed:
             self.snoozed = True
+            self.categories.update(is_active=False)
+            self.categories.save()
             self.save()
 
             signals.snoozed.send(
@@ -86,6 +88,8 @@ class Subscriber(models.Model):
     def unsnooze(self):
         if self.snoozed:
             self.snoozed = False
+            self.categories.filter(is_active=False).update(is_active=True)
+            self.categories.save()
             self.save()
 
             signals.unsnoozed.send(
@@ -154,9 +158,10 @@ class Newsletter(models.Model):
 
 
 class Subscription(models.Model):
-    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, related_name="sub_subscriber")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_category")
+    subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE, related_name="subscriptions")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="subscriptions")
     joined_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
     
     class Meta:
         models.UniqueConstraint(
