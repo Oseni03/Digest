@@ -6,7 +6,7 @@
 {% block content %}
 <div class="my-3">
     <p class="fs-3">Thanks for subscribing to our newsletter.</p>
-    {% if send_newsletter %}
+    {% if send_verification %}
     <p>You should receive a confirmation email soon.</p>
     <div class="my-3">
         <a href="{% url 'newsletter:subscribe' %}" class="btn btn-light text-black">Go Home</a>

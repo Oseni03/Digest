@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
-from django.views.generic import DetailView, FormView, TemplateView, View
+from django.views.generic import DetailView, FormView, TemplateView, View, ListView
+from django.views.generic.detail import SingleObjectMixin
 
 from .forms import SubscriberEmailForm
 from .models import Subscriber, Category, Newsletter
@@ -122,8 +123,37 @@ class SnoozeSubscription(View):
         return render(request, "newsletter/unsubscribe_successful.html", {"source": "snooze"})
 
 
-class ArchiveView(TemplateView):
-    template_name = "newsletter/archive.html"
+class CategoriesView(ListView):
+    template_name = "newsletter/categories.html"
+    model = Category
+    context_object_name = "categories"
+    
+    def get_queryset(self):
+        return Category.objects.filter(is_active=True)
+
+
+class CategoryDetailView(SingleObjectMixin, ListView):
+    model = Newsletter
+    template_name = "newsletter/category_detail.html"
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
+    paginate_by = 15
+    context_object_name = "newsletters"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(
+            queryset=Category.objects.filter(is_active=True)
+        )
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.object
+        context["breadcrumb"] = True
+        return context
+
+    def get_queryset(self):
+        return self.object.newletters.all()
 
 
 class NewsletterDetailView(DetailView):
@@ -131,3 +161,9 @@ class NewsletterDetailView(DetailView):
     template_name = "newsletter/newsletter_detail.html"
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
+    context_object_name = "newsletter"
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["breadcrumb"] = True
+        return context_object_name
