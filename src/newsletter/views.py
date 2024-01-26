@@ -1,8 +1,9 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.views.generic import DetailView, FormView, TemplateView, View, ListView
 from django.views.generic.detail import SingleObjectMixin
+from django.core.paginator import Paginator
 
 from .forms import SubscriberEmailForm
 from .models import Subscriber, Category, Newsletter
@@ -132,12 +133,12 @@ class CategoriesView(ListView):
         return Category.objects.filter(is_active=True)
 
 
-class CategoryDetailView(SingleObjectMixin, ListView):
+class CategoryDetailView(ListView, SingleObjectMixin):
     model = Newsletter
     template_name = "newsletter/category_detail.html"
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
-    paginate_by = 15
+    paginate_by = 3
     context_object_name = "newsletters"
 
     def get(self, request, *args, **kwargs):
@@ -156,14 +157,15 @@ class CategoryDetailView(SingleObjectMixin, ListView):
         return self.object.newletters.all()
 
 
-class NewsletterDetailView(DetailView):
-    model = Newsletter 
-    template_name = "newsletter/newsletter_detail.html"
-    slug_url_kwarg = 'slug'
-    slug_field = 'slug'
-    context_object_name = "newsletter"
+class NewsletterDetailView(View):
     
-    def get_context_data(self):
-        context = super().get_context_data()
-        context["breadcrumb"] = True
-        return context_object_name
+    def get(self, request, category_slug, slug):
+        category = get_object_or_404(Category, slug=category_slug)
+        newsletter = get_object_or_404(Newsletter, slug=slug, category=category)
+        
+        context = {
+            "category": category,
+            "newsletter": newsletter,
+            "breadcrumb": True,
+        }
+        return render(request, "newsletter/newsletter_detail.html", context)

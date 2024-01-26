@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ newsletter.subject|title }}{% endblock %}
+
+{% block custom_styles %}
+<link href="{% static 'breadcrumbs.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-white">
+    {{ newsletter.content }}
+</div>
+{% endblock %}

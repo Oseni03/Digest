@@ -8,42 +8,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="my-3 text-start">
-    <h2 class="my-2">Archive</h2>
-    <div class="py-2">
-        <p class="text-muted text-uppercase">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
-    </div>
-    <div class="py-2">
-        <p class="text-muted">JAN 15, 2024</p>
-        <h4>#120: The Lord's Mayor Show</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
+<div class="my-3">
+    <h2 class="my-3">Categories</h2>
+    <div id="categories" class="text-start">
+        <div class="d-flex flex-column">
+            {% for category in categories %}
+            <a href="{{ category.get_absolute_url }}" class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                <div class="border rounded-5 p-4 bg-light text-dark mb-3">
+                    {{ category.name|title }}</div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

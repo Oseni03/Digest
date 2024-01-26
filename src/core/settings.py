@@ -16,7 +16,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 # TENANTS CONFIGURATION
@@ -91,7 +90,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        'NAME': "digest",
+        'NAME': "digest-newsletter",
         'USER': "oseni",
         'PASSWORD': "postgres",
         'HOST': "localhost",
