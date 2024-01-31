@@ -16,6 +16,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+HTTP_PROTOCOL = "http"
+
 # Application definition
 
 # TENANTS CONFIGURATION
@@ -40,7 +42,6 @@ SHARED_APPS = (
 TENANT_APPS = (
     'django.contrib.auth',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
@@ -52,6 +53,8 @@ INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in S
 TENANT_MODEL = "niche.Niche" # app.Model
 TENANT_DOMAIN_MODEL = "niche.Domain" # app.Model
 PUBLIC_SCHEMA_URLCONF = "niche.urls"
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django_tenants.middleware.main.TenantMainMiddleware',

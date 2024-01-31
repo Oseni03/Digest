@@ -13,16 +13,24 @@
     {% endblock %}
     
 </head>
-<body class="d-flex h-100 text-center text-bg-dark">
-    <div class="cover-container d-flex w-100 h-100 py-3 mx-auto flex-column">
-        {% include "partials/_header.html" %}
+<body class="d-flex h-100 text-bg-dark">
+    <div class="container d-flex w-100 h-100 py-3 flex-column">
+        
+        <header class="mb-3 mx-auto text-center">
+            <div>
+                <h1 class="float-md-center mb-0 fw-bold">Digest</h1>
+            </div>
+        </header>
     
         <main>
             {% block content %}
             {% endblock %}
         </main>
         
-        {% include "partials/_footer.html" %}
+
+        <footer class="mt-auto text-white-50 text-center">
+            <a href="https://getbootstrap.com/" class="text-white">Privacy policy</a>
+        </footer>
     </div>
     
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>

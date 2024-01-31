@@ -1,8 +1,24 @@
-{% extends "base.html" %}
+{% extends "niche/base.html" %}
 {% load static %}
 
 {% block title %}Home page{% endblock %}
 
 {% block content %}
-Home page 
+<div class="my-4">
+    <h1>Newsletters</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+    <hr class="my-3">
+    <div id="newsletters" class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-3">
+        {% for niche in niches %}
+        <div class="col card text-bg-secondary">
+            <div class="card-body">
+                <h4 class="card-title">{{ niche.name }}</h4>
+                <h6 class="card-subtitle mb-2 text-muted fw-semibold text-uppercase">{{ niche.schedule }}</h6>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="{{ niche.get_absolute_url }}" class="card-link">Subscribe</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

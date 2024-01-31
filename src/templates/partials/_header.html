@@ -4,11 +4,13 @@
 <header class="mb-auto">
     <div>
         <h1 class="float-md-center mb-0 fw-bold">Digest</h1>
+        {% if not home %}
         <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="/">Home</a>
             <a class="nav-link fw-bold py-1 px-0" href="{{ latest.get_absolute_url }}">Latest</a>
             <a class="nav-link fw-bold py-1 px-0" href="{% url 'newsletter:archive' %}">Archive</a>
         </nav>
+        {% endif %}
     </div>
     
     {% if breadcrumb %}
