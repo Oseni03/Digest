@@ -16,7 +16,7 @@
             <a class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover stretched-link" href="{{ newsletter.get_absolute_url }}">
                 <h4>#{{ newsletter.id }}: {{ newsletter.subject|title }}</h4>
             </a>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda.</p>
+            <p><span class="text-secondary text-uppercase fw-semibold pe-2">TLDR</span> {{ newsletter.tldr }}</p>
         </div>
         <hr>
         {% endfor %}

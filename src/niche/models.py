@@ -13,7 +13,7 @@ class Niche(TenantMixin):
         
     name = models.CharField(max_length=150)
     schedule = models.CharField(max_length=25, choices=ScheduleChoices.choices, default=ScheduleChoices.DAILY)
-    description = models.TextField(null=True)
+    description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=False)
     

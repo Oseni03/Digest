@@ -144,6 +144,7 @@ class Category(models.Model):
 class Newsletter(models.Model):
     category = models.ForeignKey(Category, related_name="newletters", on_delete=models.SET_NULL, null=True)
     subject = models.CharField(max_length=255)
+    tldr = models.TextField()
     content = RichTextField()
     schedule = models.DateTimeField(blank=True, null=True)
     sent_at = models.DateTimeField(blank=True, null=True)
