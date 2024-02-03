@@ -1,1 +1,1 @@
-# Disclose Newsletter
+# Digest Newsletter
