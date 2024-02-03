@@ -3,10 +3,11 @@ from django.core.mail import EmailMessage, get_connection
 from django.template.loader import render_to_string
 
 from .utils.send_welcome import send_welcome_email
-from .utils.feeds import Feed, get_feeds_summary, get_subject
+from .utils.feeds import Feed, get_summary, get_subject
 from .models import Category, Newsletter
 
 from concurrent.futures import ThreadPoolExecutor
+from newspaper import Article
 
 
 @shared_task(name='newsletter.unsnooze')
@@ -24,8 +25,14 @@ def send_welcome_email_task(niche, to_email):
 
 def generate_newsletter(category):
     feeds = Feed().read_feeds(category.rss_url)
+    for feed in feeds:
+        article = Article(feed["link"])
+        article.download()
+        article.nlp()
+        feed["article_summary"] = article.summary
+    
     subject = get_subject(feeds[:3])
-    summary = get_feeds_summary(feeds)
+    summary = get_summary([feed["summary"] for feed in feeds])
     
     data = {
         "summary": summary,
@@ -37,8 +44,8 @@ def generate_newsletter(category):
     return newsletter.save()
 
 
-@shared_task(name="newsletter.generate_content")
-def generate_content():
+@shared_task(name="newsletter.generate_newsletters")
+def generate_newsletters():
     categories = Category.objects.filter(is_active=True)
     with ThreadPoolExecutor() as executor:
         executor.map(generate_newsletter, categories)

@@ -87,8 +87,8 @@ Take these and distill it into a final, consolidated summary of the main themes.
 Helpful Answer:"""
 
 
-def get_feeds_summary(feeds: list):
-    documents = [Document(page_content=feed["summary"]) for feed in feeds]
+def get_summary(texts: list):
+    documents = [Document(page_content=text for text in texts]
     
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k")
     
