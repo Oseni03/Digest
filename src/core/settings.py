@@ -157,6 +157,7 @@ NEWSLETTER_SEND_VERIFICATION = False
 # EMAIL CONFIRMATION
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST_USER = "example@gmail.com"
+FROM_EMAIL = "example@gmail.com"
 
 #-----------------------------------
 # REDIS DEFINITION 
